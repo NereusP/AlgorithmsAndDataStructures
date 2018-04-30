@@ -1,3 +1,5 @@
+//Test program under windows system
+
 #include<stdio.h>
 #include<process.h>
 #include"circularqueue.hpp"
