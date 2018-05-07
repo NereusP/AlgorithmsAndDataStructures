@@ -21,40 +21,40 @@ CRC16_USB			0x8005		0xFFFF			Little-endian			XOR with 0xFFFF
 
 */
 
-enum CRC16_TYPE{CRC16_CCITT=0,CRC16_CCITT_FALSE=1,CRC16_XMODEM=2,CRC16_X25=3,CRC16_MODBUS=4,CRC16_IBM=5,CRC16_MAXIM=6,CRC16_USB=7};
+enum CRC16_TYPE { CRC16_CCITT = 0, CRC16_CCITT_FALSE = 1, CRC16_XMODEM = 2, CRC16_X25 = 3, CRC16_MODBUS = 4, CRC16_IBM = 5, CRC16_MAXIM = 6, CRC16_USB = 7 };
 int CalcCRC16(FILE* fr, uint16_t& crc16value, uint16_t crc_startvalue, uint16_t polyrepres);
 
 int CRC16Calc(FILE* fr, CRC16_TYPE crc16_type, uint16_t& crc16value)
 {
-	int value=0;
-	switch(crc16_type)
+	int value = 0;
+	switch (crc16_type)
 	{
 	case CRC16_CCITT:
-		value=CalcCRC16(fr,crc16value,0x0000,0x1021);
+		value = CalcCRC16(fr, crc16value, 0x0000, 0x1021);
 		break;
 	case CRC16_CCITT_FALSE:
-		value=CalcCRC16(fr,crc16value,0xFFFF,0x1021);
+		value = CalcCRC16(fr, crc16value, 0xFFFF, 0x1021);
 		break;
 	case CRC16_XMODEM:
-		value=CalcCRC16(fr,crc16value,0x0000,0x1021);
+		value = CalcCRC16(fr, crc16value, 0x0000, 0x1021);
 		break;
 	case CRC16_X25:
-		value=CalcCRC16(fr,crc16value,0x0000,0x1021);
+		value = CalcCRC16(fr, crc16value, 0x0000, 0x1021);
 		break;
 	case CRC16_MODBUS:
-		value=CalcCRC16(fr,crc16value,0xFFFF,0x8005);
+		value = CalcCRC16(fr, crc16value, 0xFFFF, 0x8005);
 		break;
 	case CRC16_IBM:
-		value=CalcCRC16(fr,crc16value,0x0000,0x8005);
+		value = CalcCRC16(fr, crc16value, 0x0000, 0x8005);
 		break;
 	case CRC16_MAXIM:
-		value=CalcCRC16(fr,crc16value,0x0000,0x8005);
+		value = CalcCRC16(fr, crc16value, 0x0000, 0x8005);
 		break;
 	case CRC16_USB:
-		value=CalcCRC16(fr,crc16value,0xFFFF,0x8005);
+		value = CalcCRC16(fr, crc16value, 0xFFFF, 0x8005);
 		break;
 	default:
-		value=-1;
+		value = -1;
 		break;
 	}
 	return value;
@@ -80,15 +80,14 @@ int CalcCRC16(FILE* fr, uint16_t& crc16value, uint16_t crc_startvalue, uint16_t 
 	fseek(fr, 0, SEEK_SET);
 	fseek(fr, 0, SEEK_END);
 	filesize = ftell(fr);
-	uint32_t remainsize=filesize;
-	prdatabuffer = new uint8_t[4096];
+	prdatabuffer = new uint8_t[0x400000];
 	fseek(fr, 0, SEEK_SET);
 	while (filesize>0)
 	{
-		uint8_t readsize = min(remainsize, 4096);
+		uint32_t readsize = min(filesize, 0x400000);
 		fread(prdatabuffer, 1, readsize, fr);
-		remainsize = remainsize - readsize;
-		for (uint8_t i = 0; i<readsize; i++)
+		filesize = filesize - readsize;
+		for (uint32_t i = 0; i<readsize; i++)
 		{
 			crc16reg = prdatabuffer[i] ^ crc16reg;
 			for (uint8_t shift_t = 0; shift_t<8; shift_t++)
@@ -103,10 +102,6 @@ int CalcCRC16(FILE* fr, uint16_t& crc16value, uint16_t crc_startvalue, uint16_t 
 					crc16reg = crc16reg >> 1;
 				}
 			}
-		}
-		if((((100*remainsize)/filesize)<100)&&(((100*remainsize)/filesize)%10==0))
-		{
-			printf("Completed %d\n",((100*remainsize)/filesize));
 		}
 	}
 	//crc16value = (crc16reg >> 8) | (crc16reg << 8);
