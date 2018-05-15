@@ -1,4 +1,4 @@
-// crc16dll.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄµ¼³öº¯Êı¡£
+// crc16dll.cpp : å®šä¹‰ DLL åº”ç”¨ç¨‹åºçš„å¯¼å‡ºå‡½æ•°ã€‚
 //
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ int CalcCRC16(FILE* fr, CRC16_TYPE crc16_type, uint16_t& crc16value)
 		value = CalcCRC16Ex(fr, crc16value, 0x0000, 0x1021);
 		break;
 	case CRC16_X25:
-		value = CalcCRC16Ex(fr, crc16value, 0x0000, 0x1021);
+		value = CalcCRC16Ex(fr, crc16value, 0xFFFF, 0x1021);
 		break;
 	case CRC16_MODBUS:
 		value = CalcCRC16Ex(fr, crc16value, 0xFFFF, 0x8005);
