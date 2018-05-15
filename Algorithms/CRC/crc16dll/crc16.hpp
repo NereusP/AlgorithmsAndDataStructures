@@ -13,7 +13,7 @@ Name				Polynomial	Starting value	Big-Edian/Little-endian	Result processing
 CRC16_CCITT			0x1021		0x0000			Little-endian			XOR with 0x0000
 CRC16_CCITT_FALSE	0x1021		0xFFFF			Little-endian			XOR with 0x0000
 CRC16_XMODEM		0x1021		0x0000			Little-endian			XOR with 0x0000
-CRC16_X25			0x1021		0x0000			Little-endian			XOR with 0xFFFF
+CRC16_X25			0x1021		0xFFFF			Little-endian			XOR with 0xFFFF
 CRC16_MODBUS		0x8005		0xFFFF			Little-endian			XOR with 0x0000
 CRC16_IBM			0x8005		0x0000			Little-endian			XOR with 0x0000
 CRC16_MAXIM			0x8005		0x0000			Little-endian			XOR with 0xFFFF
